@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+		<RootNamespace>NIMBY</RootNamespace>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Silk.NET.OpenGL" Version="2.3.0" />
+		<PackageReference Include="Silk.NET.Windowing" Version="2.3.0" />
+		<PackageReference Include="Silk.NET.Input" Version="2.3.0" />
+		<PackageReference Include="StbImageSharp" Version="2.22.5" />
+		<PackageReference Include="FontStash.NET" Version="1.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Assets\" />
+	</ItemGroup>
+
+</Project>
