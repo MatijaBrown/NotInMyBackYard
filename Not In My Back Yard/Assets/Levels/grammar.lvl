@@ -1,0 +1,12 @@
+﻿width height
+tile tile tile tile
+tile tile tile tile
+tile tile tile tile
+tile tile tile tile
+windPower windPower windPower windPower
+windPower windPower windPower windPower
+windPower windPower windPower windPower
+windPower windPower windPower windPower
+This is the story text that will be displayed before the level begins.
+ß // We never use this symbol, so it is the line seperator
+This is the story text that will be displayed after the level was completed.

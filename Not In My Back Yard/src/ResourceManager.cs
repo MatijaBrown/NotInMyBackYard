@@ -1,4 +1,5 @@
-﻿using Silk.NET.OpenGL;
+﻿using NIMBY.Graphics;
+using Silk.NET.OpenGL;
 using System.Collections.Generic;
 
 using Shader = NIMBY.Graphics.Shader;
@@ -11,6 +12,7 @@ namespace NIMBY
 
         private static readonly IList<Shader> shaders = new List<Shader>();
         private static readonly IList<Texture> textures = new List<Texture>();
+        private static readonly IList<VAO> vaos = new List<VAO>();
 
         private static GL gl;
 
@@ -33,6 +35,13 @@ namespace NIMBY
             return texture;
         }
 
+        public static VAO CreateVao()
+        {
+            VAO vao = new(gl);
+            vaos.Add(vao);
+            return vao;
+        }
+
         public static void Clear()
         {
             foreach (Shader shader in shaders)
@@ -42,6 +51,10 @@ namespace NIMBY
             foreach (Texture texture in textures)
             {
                 texture.Dispose();
+            }
+            foreach (VAO vao in vaos)
+            {
+                vao.Dispose();
             }
         }
 

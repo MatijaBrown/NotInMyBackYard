@@ -7,9 +7,8 @@ out vec2 pass_tcoord;
 
 uniform mat4 transformation;
 uniform mat4 projection;
-uniform mat4 camera;
 
 void main(void) {
 	pass_tcoord = tcoord;
-	gl_Position = camera * projection * transformation * vec4(vertex, 0.0, 1.0);
+	gl_Position = projection * transformation * vec4(vertex, 0.0, 1.0);
 }
