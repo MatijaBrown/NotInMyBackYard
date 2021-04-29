@@ -1,4 +1,5 @@
-﻿using NIMBY.Utils;
+﻿using NIMBY.States;
+using NIMBY.Utils;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -14,10 +15,10 @@ namespace NIMBY
         private IWindow _window;
         private uint _width, _height;
 
+        private readonly StateManager _stateManager;
+
         private GL _gl;
         private Camera _camera;
-
-        World.Level level;
 
         public uint Witdh => _width;
 
@@ -32,6 +33,8 @@ namespace NIMBY
             _width = width;
             _height = height;
             _title = title;
+
+            _stateManager = new StateManager(this);
         }
 
         private void Init()
@@ -42,8 +45,9 @@ namespace NIMBY
             ResourceManager.Init(_gl);
             Input.Init(_window.CreateInput());
 
-            level = new World.Level("level1", this);
-            _camera = new Camera(0.0f, 0.0f, (float)level.WorldWidth * Tiles.Tile.SIZE / 2.0f, (float)level.WorldHeight * Tiles.Tile.SIZE / 2.0f);
+            _camera = new Camera(0.0f, 0.0f, 0.0f, 0.0f);
+
+            _stateManager.AddState("GameState", new GameState());
         }
 
         private void Update(double d)
@@ -52,7 +56,7 @@ namespace NIMBY
             _height = (uint)_window.Size.Y;
 
             _camera.Update((float)d);
-            level.Update();
+            _stateManager.Update((float)d);
 
             Input.Update();
         }
@@ -60,14 +64,14 @@ namespace NIMBY
         private void Render(double _)
         {
             _gl.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-            _gl.Clear((uint)ClearBufferMask.ColorBufferBit | (uint)ClearBufferMask.DepthBufferBit);
+            _gl.Clear((uint)ClearBufferMask.ColorBufferBit);
 
-            level.Render(_camera);
+            _stateManager.Render();
         }
 
         private void Close()
         {
-            ResourceManager.Clear();
+            _stateManager.Dispose();
         }
 
         public void Dispose()

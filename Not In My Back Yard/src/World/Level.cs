@@ -1,4 +1,5 @@
-﻿using NIMBY.Tiles;
+﻿using NIMBY.States;
+using NIMBY.Tiles;
 using NIMBY.Utils;
 using System;
 using System.IO;
@@ -12,25 +13,29 @@ namespace NIMBY.World
         private uint _worldWidth, _worldHeight;
         private uint _maxTurbines;
 
-        private readonly Game _game;
+        private readonly GameState _state;
         private readonly Graphics.Renderers.TileRenderer _renderer;
 
         public uint WorldWidth => _worldWidth;
 
+        public float PixelWidth => _worldWidth * Tile.SIZE;
+
         public uint WorldHeight => _worldHeight;
+
+        public float PixelHeight => _worldHeight * Tile.SIZE;
 
         public uint MaxTurbines => _maxTurbines;
 
-        public Game Game => _game;
+        public GameState State => _state;
 
         public uint PlacedTurbines { get; set; } = 0;
 
-        public Level(string levelFile, Game game)
+        public Level(string levelFile, GameState state)
         {
-            _game = game;
+            _state = state;
 
             LoadLevel(levelFile);
-            _renderer = new Graphics.Renderers.TileRenderer(_game);
+            _renderer = new Graphics.Renderers.TileRenderer(_state);
         }
 
         public void Update()

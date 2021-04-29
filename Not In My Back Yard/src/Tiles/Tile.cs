@@ -77,12 +77,12 @@ namespace NIMBY.Tiles
 
         public void Click(float x, float y, float xOffset, float yOffset)
         {
-            x -= _level.Game.Witdh / 2.0f;
-            y -= _level.Game.Height / 2.0f;
+            x -= _level.State.Manager.Game.Witdh / 2.0f;
+            y -= _level.State.Manager.Game.Height / 2.0f;
 
-            float dx = _drawX * _level.Game.Camera.Scale - _level.Game.Camera.Position.X;
-            float dy = -_drawY * _level.Game.Camera.Scale + _level.Game.Camera.Position.Y;
-            float s = SIZE * _level.Game.Camera.Scale;
+            float dx = _drawX * _level.State.Manager.Game.Camera.Scale - _level.State.Manager.Game.Camera.Position.X;
+            float dy = -_drawY * _level.State.Manager.Game.Camera.Scale + _level.State.Manager.Game.Camera.Position.Y;
+            float s = SIZE * _level.State.Manager.Game.Camera.Scale;
 
             if (x > dx && y < dy && x < dx + s && y > dy - s)
             {

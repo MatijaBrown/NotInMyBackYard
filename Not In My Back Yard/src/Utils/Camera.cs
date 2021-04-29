@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silk.NET.Input;
+using System;
 using System.Numerics;
 
 namespace NIMBY.Utils
@@ -11,10 +12,10 @@ namespace NIMBY.Utils
         public const float MIN_ZOOM = 0.0f;
         public const float MAX_ZOOM = 700.0f;
 
-        public const float PER_PIXEL_DRAGGED = 20.0f;
+        public const float PER_PIXEL_DRAGGED = 25.0f;
         public const float PER_UNIT_ZOOMED = 50.0f;
 
-        private readonly float _maxXDistance, _maxYDistance;
+        private float _maxXDistance, _maxYDistance;
 
         private Vector3 _position;
         private float _zoom;
@@ -25,6 +26,10 @@ namespace NIMBY.Utils
         public float Zoom => _zoom;
 
         public float Scale => _scale;
+
+        public float MaxXDistance { get => _maxXDistance; set => _maxXDistance = value; }
+
+        public float MaxYDistance { get => _maxYDistance; set => _maxYDistance = value; }
 
         public Camera(float startX, float startY, float maxXDistance, float maxYDistance)
         {
@@ -42,12 +47,34 @@ namespace NIMBY.Utils
             if (Input.Dragging)
             {
                 _position.X -= Input.MouseXDelta * PER_PIXEL_DRAGGED * delta;
-                _position.X = MathF.Max(_position.X, -_maxXDistance);
-                _position.X = MathF.Min(_position.X, _maxXDistance);
                 _position.Y += Input.MouseYDelta * PER_PIXEL_DRAGGED * delta;
-                _position.Y = MathF.Max(_position.Y, -_maxYDistance);
-                _position.Y = MathF.Min(_position.Y, _maxYDistance);
             }
+            else
+            {
+
+                if (Input.IsKeyDown(Key.W))
+                {
+                    _position.Y += PER_PIXEL_DRAGGED * delta;
+                }
+                else if (Input.IsKeyDown(Key.S))
+                {
+                    _position.Y -= PER_PIXEL_DRAGGED * delta;
+                }
+
+                if (Input.IsKeyDown(Key.A))
+                {
+                    _position.X -= PER_PIXEL_DRAGGED * delta;
+                }
+                else if (Input.IsKeyDown(Key.D))
+                {
+                    _position.X += PER_PIXEL_DRAGGED * delta;
+                }
+            }
+
+            _position.X = MathF.Max(_position.X, -_maxXDistance);
+            _position.X = MathF.Min(_position.X, _maxXDistance);
+            _position.Y = MathF.Max(_position.Y, -_maxYDistance);
+            _position.Y = MathF.Min(_position.Y, _maxYDistance);
 
             _zoom = Input.Scroll * PER_UNIT_ZOOMED;
 

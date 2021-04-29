@@ -1,4 +1,5 @@
-﻿using NIMBY.Tiles;
+﻿using NIMBY.States;
+using NIMBY.Tiles;
 using NIMBY.Utils;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -14,9 +15,9 @@ namespace NIMBY.Graphics.Renderers
 
         private readonly Game _game;
 
-        public TileRenderer(Game game)
+        public TileRenderer(GameState _state)
         {
-            _game = game;
+            _game = _state.Manager.Game;
             _gl = _game.Gl;
             _shader = ResourceManager.LoadShader("tileVertexShader", "tileFragmentShader");
             _vao = ResourceManager.CreateVao();
