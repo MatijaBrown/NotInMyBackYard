@@ -41,17 +41,20 @@ namespace NIMBY.Graphics.Renderers
         public void Render(Tile tile, Camera camera)
         {
             _shader.Start();
-            Matrix4x4 transformation = Maths.CreateTransformationMatrix(tile.DrawX, tile.DrawY, 1.0f);
-            _shader.LoadMatrix("transformation", transformation);
-            float aspectRatio = (float)_game.Witdh / _game.Height;
-            Matrix4x4 projection = Maths.CreateProjectionMatrix(camera.XOffset, camera.YOffset, _game.Height * aspectRatio, _game.Height);
-            _shader.LoadMatrix("projection", projection);
 
-            Texture texture = TileTexture.Get(tile.TileType);
+            Matrix4x4 transformation = Maths.CreateTransformationMatrix(tile.DrawX, tile.DrawY, camera.Scale);
+            _shader.LoadMatrix("transformation", transformation);
+            Matrix4x4 viewMatrix = Maths.CreateViewMatrix(camera);
+            _shader.LoadMatrix("viewMatrix", viewMatrix);
+            float aspectRatio = (float)_game.Witdh / _game.Height;
+            Matrix4x4 projection = Maths.CreateProjectionMatrix(_game.Height * aspectRatio, _game.Height); ;
+            _shader.LoadMatrix("projection", projection);
 
             _vao.Bind();
             _gl.EnableVertexAttribArray(0);
             _gl.EnableVertexAttribArray(1);
+
+            Texture texture = TileTexture.Get(tile.TileType);
             texture.Bind();
             _gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
             texture.Unbind();

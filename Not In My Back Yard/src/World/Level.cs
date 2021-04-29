@@ -47,7 +47,7 @@ namespace NIMBY.World
             {
                 foreach (Tile tile in _tiles)
                 {
-                    tile.Click(Input.MouseX, Input.MouseY);
+                    tile.Click(Input.MouseX, Input.MouseY, xOff, yOff);
                 }
             }
 

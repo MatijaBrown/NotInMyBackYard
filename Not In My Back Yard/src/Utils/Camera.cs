@@ -1,54 +1,62 @@
 ﻿using System;
+using System.Numerics;
 
 namespace NIMBY.Utils
 {
     public class Camera
     {
 
-        public const float MAX_ZOOM = 700;
-        public const float MIN_ZOOM = 1;
+        public const float NEAR_PLANE = 0.01f;
+        
+        public const float MIN_ZOOM = 0.0f;
+        public const float MAX_ZOOM = 700.0f;
 
         public const float PER_PIXEL_DRAGGED = 20.0f;
         public const float PER_UNIT_ZOOMED = 50.0f;
 
         private readonly float _maxXDistance, _maxYDistance;
 
-        private float _xOffset, _yOffset;
+        private Vector3 _position;
         private float _zoom;
+        private float _scale;
 
-        public float XOffset => _xOffset;
-
-        public float YOffset => _yOffset;
+        public Vector3 Position => _position;
 
         public float Zoom => _zoom;
 
+        public float Scale => _scale;
+
         public Camera(float startX, float startY, float maxXDistance, float maxYDistance)
         {
-            _xOffset = startX;
-            _yOffset = startY;
+            _position = new Vector3(startX, startY, 0.0f);
 
             _maxXDistance = maxXDistance;
             _maxYDistance = maxYDistance;
 
             _zoom = MIN_ZOOM;
+            _scale = 1.0f;
         }
 
         public void Update(float delta)
         {
             if (Input.Dragging)
             {
-                _xOffset -= Input.MouseXDelta * PER_PIXEL_DRAGGED * delta / _zoom;
-                _xOffset = MathF.Max(_xOffset, -_maxXDistance);
-                _xOffset = MathF.Min(_xOffset, _maxXDistance);
-                _yOffset += Input.MouseYDelta * PER_PIXEL_DRAGGED * delta / _zoom;
-                _yOffset = MathF.Max(_yOffset, -_maxYDistance);
-                _yOffset = MathF.Min(_yOffset, _maxYDistance);
+                _position.X -= Input.MouseXDelta * PER_PIXEL_DRAGGED * delta;
+                _position.X = MathF.Max(_position.X, -_maxXDistance);
+                _position.X = MathF.Min(_position.X, _maxXDistance);
+                _position.Y += Input.MouseYDelta * PER_PIXEL_DRAGGED * delta;
+                _position.Y = MathF.Max(_position.Y, -_maxYDistance);
+                _position.Y = MathF.Min(_position.Y, _maxYDistance);
             }
 
-            _zoom = Input.Scroll * PER_UNIT_ZOOMED * delta;
+            _zoom = Input.Scroll * PER_UNIT_ZOOMED;
 
-            _zoom = Math.Max(_zoom, MIN_ZOOM);
             _zoom = Math.Min(_zoom, MAX_ZOOM);
+            _zoom = Math.Max(_zoom, MIN_ZOOM);
+
+            _position.Z = _zoom;
+
+            _scale = 1.0f + MathF.Abs(_zoom) / MathF.Abs(MAX_ZOOM - MIN_ZOOM);
         }
 
     }
