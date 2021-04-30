@@ -105,5 +105,10 @@ namespace NIMBY.Tiles
             }
         }
 
+        public void Render()
+        {
+            _level.State.Renderer.RenderTile(this);
+        }
+
     }
 }

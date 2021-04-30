@@ -1,4 +1,5 @@
-﻿using NIMBY.World;
+﻿using NIMBY.Graphics;
+using NIMBY.World;
 
 namespace NIMBY.States
 {
@@ -8,11 +9,15 @@ namespace NIMBY.States
         private StateManager _manager;
         private Level _level;
 
-        public string LevelName { get; set; } = "level1";
+        private GameStateRenderer _renderer;
+
+        public string LevelName { get; set; } = "level2";
 
         public Level Level => _level;
 
         public StateManager Manager => _manager;
+
+        public GameStateRenderer Renderer => _renderer;
 
         public void Init(StateManager manager)
         {
@@ -22,9 +27,10 @@ namespace NIMBY.States
         public void Start()
         {
             _level = new Level(LevelName, this);
-
             _manager.Game.Camera.MaxXDistance = _level.PixelWidth;
             _manager.Game.Camera.MaxYDistance = _level.PixelHeight;
+
+            _renderer = new GameStateRenderer(this);
         }
 
         public void Update(float delta)
@@ -34,12 +40,16 @@ namespace NIMBY.States
 
         public void Render()
         {
-            _level.Render(_manager.Game.Camera);
+            _level.Render();
+            _renderer.Render(_manager.Game.Camera);
         }
 
         public void Stop()
         {
             ResourceManager.Clear();
+
+            _manager.Game.Camera.MaxXDistance = 0;
+            _manager.Game.Camera.MaxYDistance = 0;
         }
 
         public void Dispose()

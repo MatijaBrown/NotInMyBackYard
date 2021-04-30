@@ -1,5 +1,6 @@
 ﻿using NIMBY.States;
 using NIMBY.Utils;
+using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -18,6 +19,7 @@ namespace NIMBY
         private readonly StateManager _stateManager;
 
         private GL _gl;
+        private Silk.NET.OpenGL.Legacy.GL _legacyGl;
         private Camera _camera;
 
         public uint Witdh => _width;
@@ -25,6 +27,8 @@ namespace NIMBY
         public uint Height => _height;
 
         public GL Gl => _gl;
+
+        public Silk.NET.OpenGL.Legacy.GL LegacyGl => _legacyGl;
 
         public Camera Camera => _camera;
 
@@ -41,13 +45,16 @@ namespace NIMBY
         {
             _window.Center();
             _gl = GL.GetApi(_window);
+            _legacyGl = Silk.NET.OpenGL.Legacy.GL.GetApi(_window);
 
             ResourceManager.Init(_gl);
             Input.Init(_window.CreateInput());
 
             _camera = new Camera(0.0f, 0.0f, 0.0f, 0.0f);
 
-            _stateManager.AddState("GameState", new GameState());
+            _stateManager.AddState("Game", new GameState());
+            _stateManager.AddState("Main Menu", new MenuState());
+            _stateManager.SetState("Main Menu");
         }
 
         private void Update(double d)
@@ -63,6 +70,7 @@ namespace NIMBY
 
         private void Render(double _)
         {
+            _gl.Viewport(0, 0, _width, _height);
             _gl.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             _gl.Clear((uint)ClearBufferMask.ColorBufferBit);
 

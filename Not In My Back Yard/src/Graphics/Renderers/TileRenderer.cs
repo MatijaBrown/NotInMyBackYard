@@ -13,12 +13,13 @@ namespace NIMBY.Graphics.Renderers
         private readonly VAO _vao;
         private readonly GL _gl;
 
-        private readonly Game _game;
+        private readonly GameStateRenderer _master;
 
-        public TileRenderer(GameState _state)
+        public TileRenderer(GameStateRenderer master)
         {
-            _game = _state.Manager.Game;
-            _gl = _game.Gl;
+            _master = master;
+
+            _gl = _master.Gl;
             _shader = ResourceManager.LoadShader("tileVertexShader", "tileFragmentShader");
             _vao = ResourceManager.CreateVao();
             InitRenderData();
@@ -41,14 +42,16 @@ namespace NIMBY.Graphics.Renderers
 
         public void Render(Tile tile, Camera camera)
         {
+            var game = _master.State.Manager.Game;
+
             _shader.Start();
 
             Matrix4x4 transformation = Maths.CreateTransformationMatrix(tile.DrawX, tile.DrawY, camera.Scale);
             _shader.LoadMatrix("transformation", transformation);
             Matrix4x4 viewMatrix = Maths.CreateViewMatrix(camera);
             _shader.LoadMatrix("viewMatrix", viewMatrix);
-            float aspectRatio = (float)_game.Witdh / _game.Height;
-            Matrix4x4 projection = Maths.CreateProjectionMatrix(_game.Height * aspectRatio, _game.Height); ;
+            float aspectRatio = (float)game.Witdh / game.Height;
+            Matrix4x4 projection = Maths.CreateProjectionMatrix(game.Height * aspectRatio, game.Height); ;
             _shader.LoadMatrix("projection", projection);
 
             _vao.Bind();

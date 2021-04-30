@@ -14,7 +14,6 @@ namespace NIMBY.World
         private uint _maxTurbines;
 
         private readonly GameState _state;
-        private readonly Graphics.Renderers.TileRenderer _renderer;
 
         public uint WorldWidth => _worldWidth;
 
@@ -35,7 +34,6 @@ namespace NIMBY.World
             _state = state;
 
             LoadLevel(levelFile);
-            _renderer = new Graphics.Renderers.TileRenderer(_state);
         }
 
         public void Update()
@@ -58,11 +56,11 @@ namespace NIMBY.World
 
         }
 
-        public void Render(Camera camera)
+        public void Render()
         {
             foreach (Tile tile in _tiles)
             {
-                _renderer.Render(tile, camera);
+                tile.Render();
             }
         }
 

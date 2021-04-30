@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -8,7 +8,6 @@
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 		<PublishTrimmed>true</PublishTrimmed>
 		<PublishReadyToRun>true</PublishReadyToRun>
-		<RootNamespace>NIMBY</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,76 +19,83 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Silk.NET.OpenGL" Version="2.3.0" />
-		<PackageReference Include="Silk.NET.Windowing" Version="2.3.0" />
-		<PackageReference Include="Silk.NET.Input" Version="2.3.0" />
-		<PackageReference Include="StbImageSharp" Version="2.22.5" />
+		<PackageReference Include="Silk.NET.OpenGL.Legacy" Version="2.3.0" />
+		<PackageReference Include="Silk.NET.GLFW" Version="2.3.0" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="1.0.1" />
 		<PackageReference Include="FontStash.NET" Version="1.0.1" />
 		<PackageReference Include="FontStash.NET.GL.Legacy" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Assets\Fonts\DroidSerif-Regular.ttf">
+		<None Update="fonts\DroidSerif-Regular.ttf">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="levels\map0.lvl">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\Basic_Tile_green.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\Basic_Tile_transparent_blue.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\building1_lights_on.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Levels\level1.lvl">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Assets\Levels\level2.lvl">
+		<None Update="sprites\fan_blades_static.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Shaders\texturedQuadFragmentShader.glsl">
+		<None Update="sprites\forest1.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\grassTile.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\house1_lights_off.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\houseTile.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\mountain1.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\mountainTile.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\nums\0.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Shaders\texturedQuadVertexShader.glsl">
+		<None Update="sprites\nums\1.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\nums\2.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\nums\3.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="sprites\nums\4.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Shaders\tileFragmentShader.glsl">
+		<None Update="sprites\nums\5.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Shaders\tileVertexShader.glsl">
+		<None Update="sprites\nums\6.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Textures\Basic_Tile_green.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Assets\Textures\Basic_Tile_transparent_blue.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Assets\Textures\Basic_Tile_transparent_green.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Assets\Textures\brushstroke_thing.png">
+		<None Update="sprites\nums\7.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Textures\building1_lights_on.png">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Assets\Textures\fan_blades_static.png">
+		<None Update="sprites\nums\8.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Textures\Finish_Button.png">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Assets\Textures\forest1.png">
+		<None Update="sprites\nums\9.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Textures\house1_lights_off.png">
+		<None Update="sprites\Turbine.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Assets\Textures\mountain1.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Assets\Textures\Reset_Button.png">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Assets\Textures\title_everything.png">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Assets\Fonts\" />
 	</ItemGroup>
 
 </Project>
