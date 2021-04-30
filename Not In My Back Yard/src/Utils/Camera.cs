@@ -1,4 +1,4 @@
-﻿using Silk.NET.Input;
+﻿using Silk.NET.GLFW;
 using System;
 using System.Numerics;
 
@@ -52,20 +52,20 @@ namespace NIMBY.Utils
             else
             {
 
-                if (Input.IsKeyDown(Key.W))
+                if (Input.IsKeyDown(Keys.W))
                 {
                     _position.Y += PER_PIXEL_DRAGGED * delta;
                 }
-                else if (Input.IsKeyDown(Key.S))
+                else if (Input.IsKeyDown(Keys.S))
                 {
                     _position.Y -= PER_PIXEL_DRAGGED * delta;
                 }
 
-                if (Input.IsKeyDown(Key.A))
+                if (Input.IsKeyDown(Keys.A))
                 {
                     _position.X -= PER_PIXEL_DRAGGED * delta;
                 }
-                else if (Input.IsKeyDown(Key.D))
+                else if (Input.IsKeyDown(Keys.D))
                 {
                     _position.X += PER_PIXEL_DRAGGED * delta;
                 }

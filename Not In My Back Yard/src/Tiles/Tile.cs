@@ -75,7 +75,7 @@ namespace NIMBY.Tiles
             }
         }
 
-        public void Click(float x, float y, float xOffset, float yOffset)
+        public void Click(float x, float y)
         {
             x -= _level.State.Manager.Game.Witdh / 2.0f;
             y -= _level.State.Manager.Game.Height / 2.0f;
@@ -98,11 +98,6 @@ namespace NIMBY.Tiles
         {
             _drawX = xOffset + (float)(_tileX * SIZE);
             _drawY = yOffset - (float)(_tileY * SIZE);
-
-            if (Input.IsKeyDown(Silk.NET.Input.Key.Enter))
-            {
-                Console.WriteLine("Tile: " + _tileX + " " + _tileY + " Offset: " + xOffset + " " + yOffset + " Draw: " + _drawX + " " + _drawY);
-            }
         }
 
         public void Render()

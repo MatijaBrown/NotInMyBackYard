@@ -1,6 +1,7 @@
 ﻿using NIMBY.States;
 using NIMBY.Tiles;
 using NIMBY.Utils;
+using Silk.NET.GLFW;
 using System;
 using System.IO;
 
@@ -36,6 +37,17 @@ namespace NIMBY.World
             LoadLevel(levelFile);
         }
 
+        private void Click(MouseButton button)
+        {
+            if (button != MouseButton.Left)
+                return;
+
+            foreach (Tile tile in _tiles)
+            {
+                tile.Click(Input.MouseX, Input.MouseY);
+            }
+        }
+
         public void Update()
         {
             float xOff = -(float)(_worldWidth * Tile.SIZE / 2.0f);
@@ -44,14 +56,6 @@ namespace NIMBY.World
             foreach (Tile tile in _tiles)
             {
                 tile.Update(xOff, yOff);
-            }
-
-            if (Input.WasMouseButtonReleased(Silk.NET.Input.MouseButton.Left))
-            {
-                foreach (Tile tile in _tiles)
-                {
-                    tile.Click(Input.MouseX, Input.MouseY, xOff, yOff);
-                }
             }
 
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silk.NET.GLFW;
+using System;
 
 namespace NIMBY.Ui
 {
@@ -28,6 +29,14 @@ namespace NIMBY.Ui
             _width = width;
             _height = height;
             _onClick = onClick;
+
+            Input.OnMouseReleased += Click;
+        }
+
+        private void Click(MouseButton button)
+        {
+            if (_hovering)
+                _onClick.Invoke();
         }
 
         public void Update()
@@ -39,11 +48,6 @@ namespace NIMBY.Ui
             else
             {
                 _hovering = false;
-            }
-
-            if (_hovering && Input.WasMouseButtonReleased(Silk.NET.Input.MouseButton.Left))
-            {
-                _onClick.Invoke();
             }
         }
 

@@ -1,5 +1,5 @@
-﻿using Silk.NET.Input;
-using System.Numerics;
+﻿using Silk.NET.GLFW;
+using System;
 
 namespace NIMBY
 {
@@ -7,16 +7,20 @@ namespace NIMBY
     {
 
         private static readonly bool[] keys = new bool[1024];
-        private static readonly bool[] lastKeys = new bool[1024];
         private static readonly bool[] mouseButtons = new bool[16];
-        private static readonly bool[] lastMouseButtons = new bool[16];
 
         private static float mouseX, mouseY;
         private static float lastMouseX, lastMouseY;
         private static float scroll;
 
         private static bool dragging;
-        private static bool lastDragging;
+
+        private static Action<Keys> onKeyReleased;
+        private static Action<MouseButton> onMouseReleased;
+
+        public static Action<Keys> OnKeyReleased { get => onKeyReleased; set => onKeyReleased = value; }
+
+        public static Action<MouseButton> OnMouseReleased { get => onMouseReleased; set => onMouseReleased = value; }
 
         public static float MouseX => mouseX;
 
@@ -30,81 +34,53 @@ namespace NIMBY
 
         public static bool Dragging => dragging;
 
-        public static void Init(IInputContext context)
+        public static unsafe void Init(Glfw glfw, WindowHandle* window)
         {
-            foreach (IKeyboard keyboard in context.Keyboards)
-            {
-                keyboard.KeyDown += OnKeyDown;
-                keyboard.KeyUp += OnKeyUp;
-            }
-            foreach (IMouse mouse in context.Mice)
-            {
-                mouse.MouseDown += OnMouseDown;
-                mouse.MouseUp += OnMouseUp;
-                mouse.MouseMove += OnMouseMove;
-                mouse.Scroll += OnMouseScroll;
-            }
+            glfw.SetKeyCallback(window, KeyCallback);
+            glfw.SetMouseButtonCallback(window, MouseButtonCallback);
+            glfw.SetCursorPosCallback(window, MousePosCallback);
+            glfw.SetScrollCallback(window, MouseScrollCallback);
             scroll = 0;
         }
 
         public static void Update()
         {
-            for (int i = 0; i < keys.Length; i++)
-            {
-                lastKeys[i] = keys[i];
-            }
-            for (int i = 0; i < mouseButtons.Length; i++)
-            {
-                lastMouseButtons[i] = mouseButtons[i];
-            }
-
             lastMouseX = mouseX;
             lastMouseY = mouseY;
-
-            lastDragging = dragging;
         }
 
-        private static void OnKeyDown(IKeyboard _, Key key, int __)
+        private static unsafe void KeyCallback(WindowHandle* _, Keys key, int __, InputAction action, KeyModifiers ___)
         {
             if ((int)key < keys.Length)
             {
-                keys[(int)key] = true;
+                if (action == InputAction.Press)
+                    keys[(int)key] = true;
+                else if (action == InputAction.Release)
+                {
+                    keys[(int)key] = false;
+                    onKeyReleased?.Invoke(key);
+                }
             }
         }
 
-        private static void OnKeyUp(IKeyboard _, Key key, int __)
-        {
-            if ((int)key < keys.Length)
-            {
-                keys[(int)key] = false;
-            }
-        }
-
-        private static void OnMouseDown(IMouse _, MouseButton button)
+        private static unsafe void MouseButtonCallback(WindowHandle* _, MouseButton button, InputAction action, KeyModifiers ___)
         {
             if ((int)button < mouseButtons.Length)
             {
-                mouseButtons[(int)button] = true;
+                if (action == InputAction.Press)
+                    mouseButtons[(int)button] = true;
+                else if (action == InputAction.Release)
+                {
+                    mouseButtons[(int)button] = false;
+                    onMouseReleased?.Invoke(button);
+                }
             }
         }
 
-        private static void OnMouseUp(IMouse _, MouseButton button)
+        private static unsafe void MousePosCallback(WindowHandle* _, double x, double y)
         {
-            if ((int)button < mouseButtons.Length)
-            {
-                mouseButtons[(int)button] = false;
-            }
-
-            if (button == MouseButton.Left)
-            {
-                dragging = false;
-            }
-        }
-
-        private static void OnMouseMove(IMouse _, Vector2 pos)
-        {
-            mouseX = pos.X;
-            mouseY = pos.Y;
+            mouseX = (float)x;
+            mouseY = (float)y;
 
             if (IsButtonDown(MouseButton.Left))
             {
@@ -112,29 +88,19 @@ namespace NIMBY
             }
         }
 
-        private static void OnMouseScroll(IMouse _, ScrollWheel wheel)
+        private static unsafe void MouseScrollCallback(WindowHandle* _, double __, double y)
         {
-            scroll += wheel.Y;
+            scroll += (float)y;
         }
 
-        public static bool IsKeyDown(Key key)
+        public static bool IsKeyDown(Keys key)
         {
             return keys[(int)key];
-        }
-
-        public static bool WasKeyReleased(Key key)
-        {
-            return !keys[(int)key] && lastKeys[(int)key];
         }
 
         public static bool IsButtonDown(MouseButton button)
         {
             return mouseButtons[(int)button];
-        }
-
-        public static bool WasMouseButtonReleased(MouseButton button)
-        {
-            return !mouseButtons[(int)button] && lastMouseButtons[(int)button] && !lastDragging;
         }
 
     }

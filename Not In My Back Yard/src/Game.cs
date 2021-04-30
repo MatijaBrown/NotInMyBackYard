@@ -1,25 +1,24 @@
 ﻿using NIMBY.States;
 using NIMBY.Utils;
 using Silk.NET.GLFW;
-using Silk.NET.Input;
-using Silk.NET.Maths;
 using Silk.NET.OpenGL;
-using Silk.NET.Windowing;
 using System;
 
 namespace NIMBY
 {
-    public class Game : IDisposable
+    public unsafe class Game : IDisposable
     {
 
         private readonly string _title;
-        private IWindow _window;
+        private WindowHandle* _window;
         private uint _width, _height;
 
         private readonly StateManager _stateManager;
 
         private GL _gl;
         private Silk.NET.OpenGL.Legacy.GL _legacyGl;
+        private Glfw _glfw;
+
         private Camera _camera;
 
         public uint Witdh => _width;
@@ -30,6 +29,8 @@ namespace NIMBY
 
         public Silk.NET.OpenGL.Legacy.GL LegacyGl => _legacyGl;
 
+        public Glfw Glfw => _glfw;
+
         public Camera Camera => _camera;
 
         public Game(uint width, uint height, string title)
@@ -39,16 +40,17 @@ namespace NIMBY
             _title = title;
 
             _stateManager = new StateManager(this);
+            _glfw = Glfw.GetApi();
         }
 
         private void Init()
         {
-            _window.Center();
-            _gl = GL.GetApi(_window);
-            _legacyGl = Silk.NET.OpenGL.Legacy.GL.GetApi(_window);
+            var context = new GlfwContext(_glfw, _window);
+            _gl = GL.GetApi(context);
+            _legacyGl = Silk.NET.OpenGL.Legacy.GL.GetApi(context);
 
             ResourceManager.Init(_gl);
-            Input.Init(_window.CreateInput());
+            Input.Init(_glfw, _window);
 
             _camera = new Camera(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -59,16 +61,13 @@ namespace NIMBY
 
         private void Update(double d)
         {
-            _width = (uint)_window.Size.X;
-            _height = (uint)_window.Size.Y;
-
             _camera.Update((float)d);
             _stateManager.Update((float)d);
 
             Input.Update();
         }
 
-        private void Render(double _)
+        private void Render()
         {
             _gl.Viewport(0, 0, _width, _height);
             _gl.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -89,20 +88,24 @@ namespace NIMBY
 
         public void Run()
         {
-            var ops = WindowOptions.Default;
-            ops.Size = new Vector2D<int>((int)_width, (int)_height);
-            ops.Title = _title;
-            ops.FramesPerSecond = 0;
-            ops.UpdatesPerSecond = 60;
-            ops.VSync = true;
-            ops.WindowBorder = WindowBorder.Fixed;
-            _window = Window.Create(ops);
-            _window.Load += Init;
-            _window.Update += Update;
-            _window.Render += Render;
-            _window.Closing += Close;
-            _window.Run();
-        }
+            _glfw.Init();
+            _glfw.WindowHint(WindowHintBool.Resizable, false);
+            _window = _glfw.CreateWindow((int)_width, (int)_height, _title, null, null);
 
+            _glfw.MakeContextCurrent(_window);
+
+            Init();
+
+            while (!_glfw.WindowShouldClose(_window))
+            {
+                Update(0);
+                Render();
+                _glfw.SwapBuffers(_window);
+                _glfw.PollEvents();
+            }
+
+            _glfw.Terminate();
+
+        }
     }
 }

@@ -10,5 +10,5 @@ uniform vec2 viewSize;
 
 void main(void) {
 	pass_texCoord = texCoord;
-	gl_Position = transformation * vec4(2.0 * vertex.x / viewSize.x - 1.0, 2.0 * vertex.y / viewSize.y - 1.0, 0.0, 1.0);
+	gl_Position = transformation * vec4(2.0 * vertex.x / viewSize.x - 1.0, 1.0 - 2.0 * vertex.y / viewSize.y, 0.0, 1.0);
 }

@@ -21,8 +21,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Silk.NET.OpenGL" Version="2.3.0" />
-		<PackageReference Include="Silk.NET.Windowing" Version="2.3.0" />
-		<PackageReference Include="Silk.NET.Input" Version="2.3.0" />
+		<PackageReference Include="Silk.NET.GLFW" Version="2.3.0" />
 		<PackageReference Include="StbImageSharp" Version="2.22.5" />
 		<PackageReference Include="FontStash.NET" Version="1.0.1" />
 		<PackageReference Include="FontStash.NET.GL.Legacy" Version="1.0.0" />

@@ -34,10 +34,10 @@ namespace NIMBY.States
             _background = ResourceManager.LoadTexture("title_everything");
             _buttonBackground = ResourceManager.LoadTexture("brushstroke_thing");
 
-            _playButton = new Button(700.0f, 500.0f, 300.0f, 200.0f, () => System.Console.WriteLine("Play"));
-            _settingsButton = new Button(750.0f, 425.0f, 300.0f, 200.0f, () => System.Console.WriteLine("Settings"));
-            _creditsButton = new Button(800.0f, 325.0f, 300.0f, 200.0f, () => System.Console.WriteLine("Credits"));
-            _quitButton = new Button(850.0f, 250.0f, 300.0f, 200.0f, () => System.Console.WriteLine("Quit"));
+            _playButton = new Button(800, 300, 300, 75, () => System.Console.WriteLine("Play"));
+            _settingsButton = new Button(850, 400, 300, 75, () => System.Console.WriteLine("Settings"));
+            _creditsButton = new Button(900, 500, 300, 75, () => System.Console.WriteLine("Credits"));
+            _quitButton = new Button(950, 600, 300, 75, () => System.Environment.Exit(0));
 
             _glFons = new GLFons(_manager.Game.LegacyGl);
             _fons = _glFons.Create(512, 512, (int)FonsFlags.ZeroTopleft);
@@ -56,35 +56,28 @@ namespace NIMBY.States
         {
             var game = _manager.Game;
 
-            _renderer.RenderTexturedQuad(_background, 0, 0, game.Witdh, game.Height);
+            _renderer.RenderTexturedQuad(_background, 0, game.Height, game.Witdh, -game.Height);
 
-            _renderer.RenderTexturedQuad(_buttonBackground, _playButton.X, _playButton.Y, _playButton.Width, _playButton.Height);
-            _renderer.RenderTexturedQuad(_buttonBackground, _settingsButton.X, _settingsButton.Y, _settingsButton.Width, _settingsButton.Height);
-            _renderer.RenderTexturedQuad(_buttonBackground, _creditsButton.X, _creditsButton.Y, _creditsButton.Width, _creditsButton.Height);
-            _renderer.RenderTexturedQuad(_buttonBackground, _quitButton.X, _quitButton.Y, _quitButton.Width, _quitButton.Height);
+            _renderer.RenderTexturedQuad(_buttonBackground, _playButton.X, _playButton.Y + _playButton.Height, _playButton.Width, -_playButton.Height);
+            _renderer.RenderTexturedQuad(_buttonBackground, _settingsButton.X, _settingsButton.Y + _settingsButton.Height, _settingsButton.Width, -_settingsButton.Height);
+            _renderer.RenderTexturedQuad(_buttonBackground, _creditsButton.X, _creditsButton.Y + _creditsButton.Height, _creditsButton.Width, -_creditsButton.Height);
+            _renderer.RenderTexturedQuad(_buttonBackground, _quitButton.X, _quitButton.Y + _quitButton.Height, _quitButton.Width, -_quitButton.Height);
 
-            game.LegacyGl.Enable(Silk.NET.OpenGL.Legacy.GLEnum.Blend);
-            game.LegacyGl.BlendFunc(Silk.NET.OpenGL.Legacy.GLEnum.SrcAlpha, Silk.NET.OpenGL.Legacy.GLEnum.OneMinusSrcAlpha);
-            game.LegacyGl.Disable(Silk.NET.OpenGL.Legacy.GLEnum.Texture2D);
-            game.LegacyGl.MatrixMode(Silk.NET.OpenGL.Legacy.GLEnum.Projection);
-            game.LegacyGl.LoadIdentity();
-            game.LegacyGl.Ortho(0, game.Witdh, game.Height, 0, -1, 1);
-
-            game.LegacyGl.MatrixMode(Silk.NET.OpenGL.Legacy.GLEnum.Modelview);
-            game.LegacyGl.LoadIdentity();
-            game.LegacyGl.Disable(Silk.NET.OpenGL.Legacy.GLEnum.DepthTest);
-            game.LegacyGl.Color4(255, 255, 255, 255);
-            game.LegacyGl.Enable(Silk.NET.OpenGL.Legacy.GLEnum.Blend);
-            game.LegacyGl.BlendFunc(Silk.NET.OpenGL.Legacy.GLEnum.SrcAlpha, Silk.NET.OpenGL.Legacy.GLEnum.OneMinusSrcAlpha);
-            game.LegacyGl.Enable(Silk.NET.OpenGL.Legacy.GLEnum.CullFace);
-
+            _renderer.PrepareLegacy();
             _fons.SetFont(_fons.GetFontByName("stdfont"));
-            _fons.SetColour(0xFF0000FF);
-            _fons.DrawText(100.0f, 200.0f, "I am the walrus!");
+            _fons.SetSize(36.0f);
+            _fons.SetAlign((int)FonsAlign.Middle | (int)FonsAlign.Center);
 
-            game.LegacyGl.Disable(Silk.NET.OpenGL.Legacy.EnableCap.Blend);
-            game.LegacyGl.Disable(Silk.NET.OpenGL.Legacy.EnableCap.CullFace);
-            game.LegacyGl.Flush();
+            _fons.SetColour(_playButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
+            _fons.DrawText(_playButton.X + _playButton.Width / 2.0f, _playButton.Y + _playButton.Height / 2.0f, "Play");
+            _fons.SetColour(_settingsButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
+            _fons.DrawText(_settingsButton.X + _settingsButton.Width / 2.0f, _settingsButton.Y + _settingsButton.Height / 2.0f, "Settings");
+            _fons.SetColour(_creditsButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
+            _fons.DrawText(_creditsButton.X + _creditsButton.Width / 2.0f, _creditsButton.Y + _creditsButton.Height / 2.0f, "Credits");
+            _fons.SetColour(_quitButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
+            _fons.DrawText(_quitButton.X + _quitButton.Width / 2.0f, _quitButton.Y + _quitButton.Height / 2.0f, "Quit");
+
+            _renderer.EndLegacy();
         }
 
         public void Stop()
