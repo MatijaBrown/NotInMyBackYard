@@ -7,7 +7,8 @@
         Water = 1,
         House = 2,
         Mountain = 3,
-        Forest = 4
+        Forest = 4,
+        Building = 5
 
     }
 }

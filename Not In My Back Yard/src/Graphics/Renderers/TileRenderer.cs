@@ -13,6 +13,8 @@ namespace NIMBY.Graphics.Renderers
         private readonly VAO _vao;
         private readonly GL _gl;
 
+        private readonly Texture[] _numbers = new Texture[9];
+
         private readonly GameStateRenderer _master;
 
         public TileRenderer(GameStateRenderer master)
@@ -38,6 +40,11 @@ namespace NIMBY.Graphics.Renderers
                 1, 1
             };
             _vao.StoreData(tcoords, 1, 2, GLEnum.UnsignedInt);
+
+            for (int i = 1; i <= 9; i++)
+            {
+                _numbers[i - 1] = ResourceManager.LoadTexture("Numbers/" + i.ToString());
+            }
         }
 
         public void Render(Tile tile, Camera camera)
@@ -62,6 +69,13 @@ namespace NIMBY.Graphics.Renderers
             texture.Bind();
             _gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
             texture.Unbind();
+
+            if (tile.WindPower > 0)
+            {
+                _numbers[tile.WindPower - 1].Bind();
+                _gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+                _numbers[tile.WindPower - 1].Unbind();
+            }
 
             if (tile.Turbined)
             {

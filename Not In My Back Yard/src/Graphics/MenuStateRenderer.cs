@@ -14,8 +14,6 @@ namespace NIMBY.Graphics
         private readonly GL _gl;
 
         private readonly TextureQuadRenderer _texturedQuadRenderer;
-        private readonly GLFons _glFons;
-        private readonly Fontstash _fons;
 
         public GL Gl => _gl;
 
@@ -26,10 +24,7 @@ namespace NIMBY.Graphics
             _state = state;
             _gl = state.Manager.Game.Gl;
 
-            _texturedQuadRenderer = new TextureQuadRenderer(this);
-
-            _glFons = new(_state.Manager.Game.LegacyGl);
-            _fons = _glFons.Create(512, 512, (int)FonsFlags.ZeroTopleft);
+            _texturedQuadRenderer = new TextureQuadRenderer(_state.Manager.Game, _gl);
         }
 
         public void RenderTexturedQuad(Texture texture, float x, float y, float width, float height)

@@ -41,7 +41,7 @@ namespace NIMBY.Ui
 
         public void Update()
         {
-            if (Input.MouseX > _x && Input.MouseY > _y && Input.MouseX < _x + _width && Input.MouseY < _y + _height)
+            if (Input.MouseX > _x && Input.MouseY > _y && Input.MouseX < _x + _width && Input.MouseY < _y + _height && !Input.Dragging)
             {
                 _hovering = true;
             }

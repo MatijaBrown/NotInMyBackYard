@@ -78,6 +78,7 @@ namespace Wind_Thing.World
             int width = _width;
             int height = _height;
             int maxTurbines = ui.MaxTurbines;
+            int fiveStarEnergy = ui.FiveStarEnergy;
 
             List<string> tiles = new();
             List<string> windPower = new();
@@ -98,7 +99,7 @@ namespace Wind_Thing.World
 
             windPower.RemoveAt(windPower.Count - 1);
 
-            string result = width.ToString() + " " + height.ToString() + " " + maxTurbines.ToString() + Environment.NewLine;
+            string result = width.ToString() + " " + height.ToString() + " " + maxTurbines.ToString() + " " + fiveStarEnergy.ToString() + Environment.NewLine;
             foreach (string s in tiles)
             {
                 result += s;

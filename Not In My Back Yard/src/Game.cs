@@ -1,4 +1,6 @@
-﻿using NIMBY.States;
+﻿using FontStash.NET;
+using FontStash.NET.GL.Legacy;
+using NIMBY.States;
 using NIMBY.Utils;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
@@ -20,6 +22,11 @@ namespace NIMBY
         private Glfw _glfw;
 
         private Camera _camera;
+
+        private GLFons _glFons;
+        private Fontstash _fons;
+
+        public Fontstash Fons => _fons;
 
         public uint Witdh => _width;
 
@@ -52,11 +59,14 @@ namespace NIMBY
             ResourceManager.Init(_gl);
             Input.Init(_glfw, _window);
 
+            _glFons = new GLFons(_legacyGl);
+            _fons = _glFons.Create(512, 512, (int)FonsFlags.ZeroTopleft);
+            _fons.AddFont("stdfont", "./Assets/Fonts/DroidSerif-Regular.ttf");
+
             _camera = new Camera(0.0f, 0.0f, 0.0f, 0.0f);
 
-            _stateManager.AddState("Game", new GameState());
             _stateManager.AddState("Main Menu", new MenuState());
-            _stateManager.SetState("Main Menu");
+            _stateManager.AddState("Game", new GameState());
         }
 
         private void Update(double d)
@@ -78,7 +88,9 @@ namespace NIMBY
 
         private void Close()
         {
+            ResourceManager.Clear();
             _stateManager.Dispose();
+            _glFons.Dispose();
         }
 
         public void Dispose()
@@ -93,6 +105,7 @@ namespace NIMBY
             _window = _glfw.CreateWindow((int)_width, (int)_height, _title, null, null);
 
             _glfw.MakeContextCurrent(_window);
+            _glfw.SwapInterval(2);
 
             Init();
 
@@ -104,8 +117,9 @@ namespace NIMBY
                 _glfw.PollEvents();
             }
 
-            _glfw.Terminate();
+            Close();
 
+            _glfw.Terminate();
         }
     }
 }

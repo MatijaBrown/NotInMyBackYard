@@ -27,6 +27,7 @@ namespace NIMBY.Graphics
             _width = (uint)img.Width;
             _height = (uint)img.Height;
             Load(img.Data);
+            stream.Close();
         }
 
         public void Bind(TextureUnit unit = TextureUnit.Texture0)

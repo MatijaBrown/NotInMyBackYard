@@ -1,6 +1,5 @@
 ﻿using NIMBY.States;
 using NIMBY.Tiles;
-using NIMBY.Utils;
 using Silk.NET.GLFW;
 using System;
 using System.IO;
@@ -16,6 +15,8 @@ namespace NIMBY.World
 
         private readonly GameState _state;
 
+        private float _maxOutput;
+
         public uint WorldWidth => _worldWidth;
 
         public float PixelWidth => _worldWidth * Tile.SIZE;
@@ -30,16 +31,23 @@ namespace NIMBY.World
 
         public uint PlacedTurbines { get; set; } = 0;
 
-        public Level(string levelFile, GameState state)
+        public bool Hovering { get; set; } = true;
+
+        public float MaxOutput => _maxOutput;
+
+        public float CurrentOutput { get; set; }
+
+        public Level(GameState state)
         {
             _state = state;
 
-            LoadLevel(levelFile);
+            LoadLevel(_state.LevelName);
+            Input.OnMouseReleased += Click;
         }
 
         private void Click(MouseButton button)
         {
-            if (button != MouseButton.Left)
+            if (button != MouseButton.Left || Input.Dragging || Hovering)
                 return;
 
             foreach (Tile tile in _tiles)
@@ -50,6 +58,8 @@ namespace NIMBY.World
 
         public void Update()
         {
+            CurrentOutput = 0;
+
             float xOff = -(float)(_worldWidth * Tile.SIZE / 2.0f);
             float yOff = (float)(_worldHeight * Tile.SIZE / 2.0f);
 
@@ -57,7 +67,6 @@ namespace NIMBY.World
             {
                 tile.Update(xOff, yOff);
             }
-
         }
 
         public void Render()
@@ -66,6 +75,14 @@ namespace NIMBY.World
             {
                 tile.Render();
             }
+        }
+
+        public void Reset()
+        {
+            GC.Collect();
+
+            LoadLevel(_state.LevelName);
+            PlacedTurbines = 0;
         }
 
         private void LoadLevel(string file)
@@ -77,6 +94,7 @@ namespace NIMBY.World
             _worldWidth = uint.Parse(meta[0]);
             _worldHeight = uint.Parse(meta[1]);
             _maxTurbines = uint.Parse(meta[2]);
+            _maxOutput = float.Parse(meta[3]);
             _tiles = new Tile[_worldHeight, _worldWidth];
 
             // Load Tiles
@@ -91,18 +109,26 @@ namespace NIMBY.World
             }
 
             // Load wind powers
-            for (int i = 1; i <= _worldHeight; i++)
+            for (int i = 1 + (int)_worldHeight; i < 2 * _worldHeight + 1; i++)
             {
                 string[] line = lines[i].Split(' ');
                 for (int j = 0; j < _worldWidth; j++)
                 {
                     int power = int.Parse(line[j]);
-                    _tiles[i - 1, j].WindPower = power;
+                    _tiles[i - 1 - _worldHeight, j].WindPower = power;
                 }
             }
 
-            // TODO: Load writing
+        }
 
+        public Tile GetTile(uint x, uint y)
+        {
+            if (x < 0 || y < 0 || x >= _worldWidth || y >= _worldHeight)
+            {
+                return null;
+            }
+
+            return _tiles[y, x];
         }
 
         public void Dispose()

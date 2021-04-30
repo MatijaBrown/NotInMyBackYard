@@ -19,14 +19,14 @@ namespace NIMBY.Graphics.Renderers
 
         private readonly GL _gl;
         private readonly Shader _shader;
-        private readonly MenuStateRenderer _master;
+        private readonly Game _game;
 
         private readonly VAO _vao;
 
-        public TextureQuadRenderer(MenuStateRenderer master)
+        public TextureQuadRenderer(Game game, GL gl)
         {
-            _master = master;
-            _gl = _master.Gl;
+            _game = game;
+            _gl = gl;
 
             _shader = ResourceManager.LoadShader("texturedQuadVertexShader", "texturedQuadFragmentShader");
             _vao = ResourceManager.CreateVao();
@@ -35,8 +35,6 @@ namespace NIMBY.Graphics.Renderers
 
         public void Render(Texture texture, float x, float y, float width, float height)
         {
-            var game = _master.State.Manager.Game;
-
             float[] verts =
             {
                 x, y,
@@ -53,7 +51,7 @@ namespace NIMBY.Graphics.Renderers
 
             _shader.Start();
             _shader.LoadMatrix("transformation", Matrix4x4.Identity);
-            _shader.LoadVector("viewSize", new Vector2(game.Witdh, game.Height));
+            _shader.LoadVector("viewSize", new Vector2(_game.Witdh, _game.Height));
 
             _vao.Bind();
             _gl.EnableVertexAttribArray(0);

@@ -8,7 +8,7 @@ namespace NIMBY.Tiles
         public static Texture Grass, Water, Forest, House, Mountain;
         public static Texture Turbine;
 
-        static TileTexture()
+        public static void Init()
         {
             Grass = ResourceManager.LoadTexture("Basic_Tile_transparent_green");
             Water = ResourceManager.LoadTexture("Basic_Tile_transparent_blue");

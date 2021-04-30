@@ -11,7 +11,7 @@ namespace LevelEditor.Interface
 
         private readonly Game _game;
 
-        private readonly TextInput _widthInput, _heightInput, _outputName, _maxTurbinesInput;
+        private readonly TextInput _widthInput, _heightInput, _outputName, _maxTurbinesInput, _fiveStarEnergyInput;
         private readonly ToggleButton _tilePowerSelector;
         private readonly Fontstash _fons;
 
@@ -24,6 +24,7 @@ namespace LevelEditor.Interface
 
         private string _outputFont = null;
         private int _maxTurbines;
+        private int _fiveStarEnergy = 0;
 
         public TileType CurrentSelected => _currentSelected;
 
@@ -35,6 +36,8 @@ namespace LevelEditor.Interface
 
         public int MaxTurbines => _maxTurbines;
 
+        public int FiveStarEnergy => _fiveStarEnergy;
+
         public Ui(Game game)
         {
             _game = game;
@@ -44,6 +47,7 @@ namespace LevelEditor.Interface
             _heightInput = new TextInput(1000.0f, 40.0f, 200.0f, 25.0f, 24, 2, "Height", "stdfont", _fons, () => _game.World.Reset(_game.World.Width, int.Parse(_heightInput.Text)));
             _outputName = new TextInput(1000.0f, 550.0f, 240.0f, 25.0f, 24, -1, "Name", "stdfont", _fons, () => _outputFont = _outputName.Text);
             _maxTurbinesInput = new TextInput(1000.0f, 75.0f, 240.0f, 25.0f, 24, -1, "Turbines", "stdfont", _fons, () => _maxTurbines = int.Parse(_maxTurbinesInput.Text));
+            _fiveStarEnergyInput = new TextInput(1000.0f, 600.0f, 200.0f, 25.0f, 24, -1, "Max E", "stdfont", _fons, () => _fiveStarEnergy = int.Parse(_fiveStarEnergyInput.Text));
 
             _grass = new Button("Grass", 1000.0f, 200.0f, 50.0f, 30.0f, () => _currentSelected = TileType.Plains);
             _water = new Button("Water", 1000.0f, 230.0f, 50.0f, 30.0f, () => _currentSelected = TileType.Water);
@@ -133,6 +137,7 @@ namespace LevelEditor.Interface
             _heightInput.Render(gl);
             _outputName.Render(gl);
             _maxTurbinesInput.Render(gl);
+            _fiveStarEnergyInput.Render(gl);
 
             gl.Color4(1.0f, 1.0f, 1.0f, 1.0f);
             RenderPreviewImage(gl);

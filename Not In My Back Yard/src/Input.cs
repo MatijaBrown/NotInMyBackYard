@@ -73,6 +73,11 @@ namespace NIMBY
                 {
                     mouseButtons[(int)button] = false;
                     onMouseReleased?.Invoke(button);
+
+                    if (button == MouseButton.Left)
+                    {
+                        dragging = false;
+                    }
                 }
             }
         }
