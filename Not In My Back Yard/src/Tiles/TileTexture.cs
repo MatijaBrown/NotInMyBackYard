@@ -5,7 +5,7 @@ namespace NIMBY.Tiles
     public static class TileTexture
     {
 
-        public static Texture Grass, Water, Forest, House, Mountain;
+        public static Texture Grass, Water, Forest, House, Mountain, Building;
         public static Texture Turbine;
 
         public static void Init()
@@ -15,6 +15,7 @@ namespace NIMBY.Tiles
             Forest = ResourceManager.LoadTexture("forest1");
             House = ResourceManager.LoadTexture("house1_lights_off");
             Mountain = ResourceManager.LoadTexture("mountain1");
+            Building = ResourceManager.LoadTexture("building1_lights_on");
             Turbine = ResourceManager.LoadTexture("fan_blades_static");
         }
 
@@ -27,6 +28,7 @@ namespace NIMBY.Tiles
                 TileType.Forest => Forest,
                 TileType.House => House,
                 TileType.Mountain => Mountain,
+                TileType.Building => Building,
                 _ => throw new System.Exception("This tile type does not exist!"),
             };
         }

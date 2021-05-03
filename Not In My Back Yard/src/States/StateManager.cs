@@ -42,7 +42,7 @@ namespace NIMBY.States
 
         public IState GetState(string name)
         {
-            if (!_states.ContainsKey(name))
+            if (_states.ContainsKey(name))
             {
                 return _states[name];
             }

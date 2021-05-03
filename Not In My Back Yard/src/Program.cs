@@ -1,4 +1,6 @@
-﻿namespace NIMBY
+﻿using NIMBY.Audio;
+
+namespace NIMBY
 {
     class Program
     {

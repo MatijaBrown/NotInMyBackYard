@@ -1,4 +1,5 @@
-﻿using Silk.NET.GLFW;
+﻿using NIMBY.Audio;
+using Silk.NET.GLFW;
 using System;
 
 namespace NIMBY.Ui
@@ -36,7 +37,10 @@ namespace NIMBY.Ui
         private void Click(MouseButton button)
         {
             if (_hovering)
+            {
+                AudioManager.Play("./Assets/Sound/Menu Button Click.wav");
                 _onClick.Invoke();
+            }
         }
 
         public void Update()

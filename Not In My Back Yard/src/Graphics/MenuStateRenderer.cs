@@ -1,6 +1,4 @@
-﻿using FontStash.NET;
-using FontStash.NET.GL.Legacy;
-using NIMBY.Graphics.Renderers;
+﻿using NIMBY.Graphics.Renderers;
 using NIMBY.States;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -14,6 +12,7 @@ namespace NIMBY.Graphics
         private readonly GL _gl;
 
         private readonly TextureQuadRenderer _texturedQuadRenderer;
+        private readonly FillRenderer _fillRenderer;
 
         public GL Gl => _gl;
 
@@ -25,11 +24,17 @@ namespace NIMBY.Graphics
             _gl = state.Manager.Game.Gl;
 
             _texturedQuadRenderer = new TextureQuadRenderer(_state.Manager.Game, _gl);
+            _fillRenderer = new FillRenderer(_state.Manager.Game, _gl);
         }
 
         public void RenderTexturedQuad(Texture texture, float x, float y, float width, float height)
         {
             _texturedQuadRenderer.Render(texture, x, y, width, height);
+        }
+
+        public void RenderQuad(float x, float y, float width, float height, Vector4 colour)
+        {
+            _fillRenderer.Render(x, y, width, height, colour);
         }
 
         public void PrepareLegacy()

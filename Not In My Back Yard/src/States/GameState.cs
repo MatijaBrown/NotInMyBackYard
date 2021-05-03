@@ -1,10 +1,12 @@
 ﻿using FontStash.NET;
+using NIMBY.Audio;
 using NIMBY.Graphics;
 using NIMBY.Tiles;
 using NIMBY.Ui;
 using NIMBY.Utils;
 using NIMBY.World;
 using System;
+using System.Diagnostics;
 
 namespace NIMBY.States
 {
@@ -22,7 +24,9 @@ namespace NIMBY.States
         private int _stars = 0;
         private bool _completed = false;
 
-        public string LevelName { get; set; } = "level1";
+        private Stopwatch _stopwatch;
+
+        public LevelData LevelMeta { get; set; }
 
         public Level Level => _level;
 
@@ -50,6 +54,25 @@ namespace NIMBY.States
             _reset = ResourceManager.LoadTexture("Reset_Button");
             _finish = ResourceManager.LoadTexture("Finish_Button");
             _star = ResourceManager.LoadTexture("Sun");
+
+            _stopwatch = Stopwatch.StartNew();
+
+            AudioManager.Stop();
+            MusicMaster.State = MusicState.Game;
+
+            switch (LevelMeta.name)
+            {
+                case "level1":
+                    AudioManager.Play("./Assets/Sound/Introduction.wav");
+                    break;
+                case "level4":
+                    AudioManager.Play("./Assets/Sound/Coversation_1.wav");
+                    break;
+                case "level7":
+                    AudioManager.Play("./Assets/Sound/Coversation_2.wav");
+                    break;
+            }
+
         }
 
         private void Finish()
@@ -64,11 +87,16 @@ namespace NIMBY.States
                 _completed = true;
                 _level.Update();
 
-                _stars = (int)Math.Floor(5.0f * Math.Floor(_level.CurrentOutput) / _level.MaxOutput);
+                _stars = (int)MathF.Min((int)Math.Floor(5.0f * Math.Floor(_level.CurrentOutput) / _level.MaxOutput), 5);
+
+                _stopwatch.Stop();
             } else if (_completed && _stars >= 3)
             {
-                System.Console.WriteLine("Reset");
-                // go to selection state
+                if (_stars > LevelMeta.bestRating)
+                    LevelMeta.bestRating = _stars;
+                LevelMeta.bestTime = (int)(_stopwatch.ElapsedMilliseconds / 1000.0f);
+                _completed = false;
+                _manager.SetState("Main Menu");
             }
         }
 
@@ -84,6 +112,7 @@ namespace NIMBY.States
             }
 
             _level.Reset();
+            _stopwatch.Restart();
         }
 
         public void Update(float delta)
@@ -110,10 +139,21 @@ namespace NIMBY.States
             _renderer.RenderTexturedQuad(_finish, _finishButton.X, _finishButton.Y + _finishButton.Height, _finishButton.Width, -_finishButton.Height);
             _renderer.RenderTexturedQuad(_reset, _resetButton.X, _resetButton.Y + _resetButton.Height, _resetButton.Width, -_resetButton.Height);
 
+            var fons = _manager.Game.Fons;
+
+            _renderer.PrepareLegacy();
+
+            fons.SetFont(fons.GetFontByName("stdfont"));
+            fons.SetColour(0xFFFF0000);
+            fons.SetSize(86.0f);
+            fons.SetAlign((int)FonsAlign.Center | (int)FonsAlign.Middle);
+            fons.DrawText(_manager.Game.Witdh / 2.0f, 100.0f, "Turbines Left: " + (_level.MaxTurbines - _level.PlacedTurbines));
+
+            _renderer.EndLegacy();
+
             if (_completed)
             {
                 _renderer.PrepareLegacy();
-                var fons = _manager.Game.Fons;
 
                 fons.SetFont(fons.GetFontByName("stdfont"));
                 fons.SetColour(0xFFFF0000);
@@ -137,6 +177,11 @@ namespace NIMBY.States
 
         public void Stop()
         {
+            if (LevelMeta.name == "level12")
+            {
+                AudioManager.Play("./Assets/Sound/Ending.wav");
+            }
+
             Input.OnMouseReleased = null;
             Input.OnKeyReleased = null;
             ResourceManager.Clear();
@@ -144,7 +189,7 @@ namespace NIMBY.States
             _manager.Game.Camera.MaxXDistance = 0;
             _manager.Game.Camera.MaxYDistance = 0;
 
-            System.GC.Collect();
+            GC.Collect();
 
             _manager.Game.Camera.CanZoom = false;
         }

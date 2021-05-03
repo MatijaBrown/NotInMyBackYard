@@ -37,17 +37,74 @@
 		<None Update="Assets\Levels\level2.lvl">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Assets\Levels\level3.lvl">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Levels\level4.lvl">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Levels\level5.lvl">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Levels\level6.lvl">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Levels\level7.lvl">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Levels\level8.lvl">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Levels\levels.meta">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Assets\Shaders\texturedQuadFragmentShader.glsl">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Assets\Shaders\texturedQuadVertexShader.glsl">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Assets\Shaders\fillFragmentShader.glsl">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Assets\Shaders\tileFragmentShader.glsl">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Assets\Shaders\fillVertexShader.glsl">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Assets\Shaders\tileVertexShader.glsl">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Coversation_1.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Coversation_2.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Ending.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Game Music Loop.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Introduction.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Level Music Loop.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Menu Button Click.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Menu Music Loop.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Turbine Plug In.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Assets\Sound\Turbine Unplug.wav">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Assets\Textures\Basic_Tile_green.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -119,6 +176,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Assets\Fonts\" />
+	  <Folder Include="Assets\Sound\" />
 	</ItemGroup>
 
 </Project>

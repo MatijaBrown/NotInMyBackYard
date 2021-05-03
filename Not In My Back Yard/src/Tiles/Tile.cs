@@ -1,4 +1,5 @@
-﻿using NIMBY.Utils;
+﻿using NIMBY.Audio;
+using NIMBY.Utils;
 using NIMBY.World;
 using System;
 
@@ -63,6 +64,7 @@ namespace NIMBY.Tiles
         {
             if (CanHaveTurbine() && _level.PlacedTurbines < _level.MaxTurbines)
             {
+                AudioManager.Play("./Assets/Sound/Turbine Plug In.wav");
                 _level.PlacedTurbines++;
                 _turbined = true;
             }
@@ -70,6 +72,7 @@ namespace NIMBY.Tiles
 
         private void Deturbine()
         {
+            AudioManager.Play("./Assets/Sound/Turbine Unplug.wav");
             if (_turbined)
             {
                 _level.PlacedTurbines--;
@@ -171,8 +174,8 @@ namespace NIMBY.Tiles
         {
             if (_turbined)
             {
-            ComputeWindValue();
-            _level.CurrentOutput += _production;
+                ComputeWindValue();
+                _level.CurrentOutput += _production;
             }
 
             _drawX = xOffset + (float)(_tileX * SIZE);

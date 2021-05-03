@@ -41,7 +41,7 @@ namespace NIMBY.World
         {
             _state = state;
 
-            LoadLevel(_state.LevelName);
+            LoadLevel(_state.LevelMeta.name);
             Input.OnMouseReleased += Click;
         }
 
@@ -81,7 +81,7 @@ namespace NIMBY.World
         {
             GC.Collect();
 
-            LoadLevel(_state.LevelName);
+            LoadLevel(_state.LevelMeta.name);
             PlacedTurbines = 0;
         }
 

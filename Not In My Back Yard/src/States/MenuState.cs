@@ -1,7 +1,8 @@
 ﻿using FontStash.NET;
-using FontStash.NET.GL.Legacy;
+using NIMBY.Audio;
 using NIMBY.Graphics;
 using NIMBY.Ui;
+using System.Threading;
 
 namespace NIMBY.States
 {
@@ -32,18 +33,20 @@ namespace NIMBY.States
             _background = ResourceManager.LoadTexture("title_everything");
             _buttonBackground = ResourceManager.LoadTexture("brushstroke_thing");
 
-            _playButton = new Button(800, 300, 300, 75, () => _manager.SetState("Game"));
-            _settingsButton = new Button(850, 400, 300, 75, () => System.Console.WriteLine("Settings"));
-            _creditsButton = new Button(900, 500, 300, 75, () => System.Console.WriteLine("Credits"));
-            _quitButton = new Button(950, 600, 300, 75, () => System.Environment.Exit(0));
+            _playButton = new Button(800, 300, 300, 75, () => _manager.SetState("Level Selector"));
+            /*_settingsButton = new Button(850, 400, 300, 75, () => System.Console.WriteLine("Settings"));
+            _creditsButton = new Button(900, 500, 300, 75, () => System.Console.WriteLine("Credits"));*/
+            _quitButton = new Button(850, 400, 300, 75, () => _manager.Game.Exit());
 
+            AudioManager.Stop();
+            MusicMaster.State = MusicState.Menu;
         }
 
         public void Update(float delta)
         {
             _playButton.Update();
-            _settingsButton.Update();
-            _creditsButton.Update();
+           /* _settingsButton.Update();
+            _creditsButton.Update();*/
             _quitButton.Update();
         }
 
@@ -54,8 +57,8 @@ namespace NIMBY.States
             _renderer.RenderTexturedQuad(_background, 0, game.Height, game.Witdh, -game.Height);
 
             _renderer.RenderTexturedQuad(_buttonBackground, _playButton.X, _playButton.Y + _playButton.Height, _playButton.Width, -_playButton.Height);
-            _renderer.RenderTexturedQuad(_buttonBackground, _settingsButton.X, _settingsButton.Y + _settingsButton.Height, _settingsButton.Width, -_settingsButton.Height);
-            _renderer.RenderTexturedQuad(_buttonBackground, _creditsButton.X, _creditsButton.Y + _creditsButton.Height, _creditsButton.Width, -_creditsButton.Height);
+            /*_renderer.RenderTexturedQuad(_buttonBackground, _settingsButton.X, _settingsButton.Y + _settingsButton.Height, _settingsButton.Width, -_settingsButton.Height);
+            _renderer.RenderTexturedQuad(_buttonBackground, _creditsButton.X, _creditsButton.Y + _creditsButton.Height, _creditsButton.Width, -_creditsButton.Height);*/
             _renderer.RenderTexturedQuad(_buttonBackground, _quitButton.X, _quitButton.Y + _quitButton.Height, _quitButton.Width, -_quitButton.Height);
 
             var fons = game.Fons;
@@ -67,10 +70,10 @@ namespace NIMBY.States
 
             fons.SetColour(_playButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
             fons.DrawText(_playButton.X + _playButton.Width / 2.0f, _playButton.Y + _playButton.Height / 2.0f, "Play");
-            fons.SetColour(_settingsButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
+            /*fons.SetColour(_settingsButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
             fons.DrawText(_settingsButton.X + _settingsButton.Width / 2.0f, _settingsButton.Y + _settingsButton.Height / 2.0f, "Settings");
             fons.SetColour(_creditsButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
-            fons.DrawText(_creditsButton.X + _creditsButton.Width / 2.0f, _creditsButton.Y + _creditsButton.Height / 2.0f, "Credits");
+            fons.DrawText(_creditsButton.X + _creditsButton.Width / 2.0f, _creditsButton.Y + _creditsButton.Height / 2.0f, "Credits");*/
             fons.SetColour(_quitButton.Hovering ? 0xFF00FFFF : 0xFFFFFFFF);
             fons.DrawText(_quitButton.X + _quitButton.Width / 2.0f, _quitButton.Y + _quitButton.Height / 2.0f, "Quit");
 

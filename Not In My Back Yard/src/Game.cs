@@ -1,5 +1,6 @@
 ﻿using FontStash.NET;
 using FontStash.NET.GL.Legacy;
+using NIMBY.Audio;
 using NIMBY.States;
 using NIMBY.Utils;
 using Silk.NET.GLFW;
@@ -66,7 +67,10 @@ namespace NIMBY
             _camera = new Camera(0.0f, 0.0f, 0.0f, 0.0f);
 
             _stateManager.AddState("Main Menu", new MenuState());
+            _stateManager.AddState("Level Selector", new LevelSelectorState());
             _stateManager.AddState("Game", new GameState());
+
+            MusicMaster.Start();
         }
 
         private void Update(double d)
@@ -93,9 +97,16 @@ namespace NIMBY
             _glFons.Dispose();
         }
 
+        public void Exit()
+        {
+            _glfw.SetWindowShouldClose(_window, true);
+        }
+
         public void Dispose()
         {
-
+            MusicMaster.Running = false;
+            AudioManager.Stop();
+            AudioManager.Finish();
         }
 
         public void Run()
